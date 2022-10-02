@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.joda.time.DateTime;
@@ -28,9 +29,9 @@ class TestaFatura2 {
 
 			"1,71112917000126, 28/09/2023, moveis planejados, 1500, satisfatorio",
 			"1,7111291700012, 28/09/2023, moveis planejados, 1500, CNPJ invalido",
-			"1,71112917000126, 28/09/2023, moveis planejados, 1500, Data de emissao valida",
 			"1,71112917000126, 02/10/2022, moveis planejados, 1500, Data de vencimento invalida", // dt venc domingo
 			"1,71112917000126, 31/02/2022, moveis planejados, 1500, Data de vencimento invalida", // dt venc invalida
+			"1,71112917000126, , moveis planejados, 1500, Data de vencimento invalida", // dt venc invalida
 			"1,71112917000126, %, moveis planejados, 1500, Data de vencimento invalida", // dt venc caracter especial
 			"1,71112917000126,, moveis planejados, 1500, Data de vencimento invalida", // dt venc null
 			"1,71112917000126, ' ', moveis planejados, 1500, Data de vencimento invalida", // dt venc branco
@@ -43,17 +44,15 @@ class TestaFatura2 {
 			"1,71112917000126, 28/09/2023,moveis planejados,0 , Valor invalido" // valor invalido
 	})
 
-	// colocar o arquivo com a massa de dados no source folder de teste
+	// é possivel criar um arquivo csv com a massa de dados no source folder de teste
 	// @CsvFileSource(resources = "\\fatura.csv", numLinesToSkip = 1)
 	void validaFatura(int numero, String cnpj, String dataVencimento, String desc, String valor, String re) {
 		try {
 			fatura = new Fatura(numero, cnpj, dataVencimento, desc, valor);
-			if (re.equals("satisfatorio")) {
-				assertEquals(re, "satisfatorio");
-			} else {
-				String dataDeHoje = obtemDataAtual();
-				assertTrue(dataDeHoje.equals(fatura.getDataEmissao()));
-			}
+			assertNotNull(fatura);
+			String dataDeHoje = obtemDataAtual();
+			assertTrue(dataDeHoje.equals(fatura.getDataEmissao()));
+
 		} catch (Exception e) {
 			assertEquals(re, e.getMessage());
 		}

@@ -54,7 +54,7 @@ public class Fatura {
 	private String setDataEmissao() {
 		DateTime dataAtual = new DateTime();
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/YYYY");
-		logger.info(">>>>>> setDataEmissao data atual => " + dataAtual.toString(fmt));
+		logger.info(">>>>>> setDataEmissao para data de hoje => " + dataAtual.toString(fmt));
 		return dataAtual.toString(fmt);
 	}
 

@@ -34,10 +34,12 @@ class TestaFatura1 {
 
 			// dado que fatura foi emitida com dados validos
 			// quando instancio o objeto
-			String dataVenc = obtemDataAtual();
-			fatura = new Fatura(1, "71112917000126", dataVenc, "moveis planejados", "1500");
-			// entao fatura nao e nula
+		
+			fatura = new Fatura(1, "71112917000126", "02/10/2023", "moveis planejados", "1500");
+			// entao fatura nao e nula e a data de emisssao é igual a data de hoje
 			assertNotNull(fatura);
+			String dataDeHoje = obtemDataAtual();
+			assertTrue(dataDeHoje.equals(fatura.getDataEmissao()));
 		} catch (Exception e) {
 			logger.info(">>>>>> nao deveria falhar => " + e.getMessage());
 			fail("nao deveria falhar fatura valida");
@@ -54,8 +56,7 @@ class TestaFatura1 {
 		try {
 			// dado que que o cnpj eh invalido
 			// quando instancio o objeto
-			String dataVenc = obtemDataAtual();
-			fatura = new Fatura(1, "7111291700012", dataVenc, "moveis planejados", "1500");
+			fatura = new Fatura(1, "7111291700012", "02/10/2023", "moveis planejados", "1500");
 			fail("deveria falhar emissao da fatura com cnpj invalido");
 		} catch (Exception e) {
 			//entao retorna mensagem de cnpj invalido
@@ -63,26 +64,7 @@ class TestaFatura1 {
 		}
 		
 	}
-	/*
-	 * verificar a data da emissao da fatura 
-	 */
-	@Test
-	void ct03_dado_que_a_fatura_foi_emitida_data_de_emissa_deve_ser_igual_a_data_atual() {
-		try {
-
-			// dado que fatura foi emitida com dados validos
-			String dataVenc = obtemDataAtual();
-			fatura = new Fatura(1, "71112917000126", dataVenc, "moveis planejados", "1500");
-			// quando consulto a data de emissao
-			// então a data eh igual a data data atual
-			String dataDeHoje = obtemDataAtual();
-			assertTrue(dataDeHoje.equals(fatura.getDataEmissao()));
-		} catch (Exception e) {
-			fail("nao deveria falhar data de emissao valida valida");
-
-		}
-		
-	}
+	
 	@Test
 	void ct04_quando_data_valida_retorna_true() {
 		assertTrue(fatura.isValida("30/09/2022"));
@@ -105,6 +87,10 @@ class TestaFatura1 {
 	@Test
 	void ct08_dado_que_a_data_eh_valida_quando_consulta_retorna_true() {
 		assertTrue(fatura.isValida("11/09/2022"));
+	}
+	@Test
+	void ct08_dado_que_a_data_eh_null_quando_consulta_retorna_true() {
+		assertFalse(fatura.isValida(null));
 	}
 
 	@Test
