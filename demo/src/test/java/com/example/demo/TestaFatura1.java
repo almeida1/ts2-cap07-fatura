@@ -25,6 +25,9 @@ class TestaFatura1 {
 		//DateTime dataVencimento = dataAtual.plusDays(10);
 		return data.toString(fmt);
 	}
+	/**
+	 * verificar o comportamento do sistema ao instanciar a fatura com dados validos.
+	 */
 	@Test
 	void ct01_quando_dados_validos_fatura_nao_eh_nulo() {
 		try {
@@ -42,51 +45,70 @@ class TestaFatura1 {
 		}
 		
 	}
+	/**
+	 * verificar o comportamento do sistema na emissao da fatura com cnpj invalido
+	 */
+	
 	@Test
-	void ct02_dado_que_a_fatura_foi_emitida_data_de_emissa_deve_ser_igual_a_data_atual() {
+	void ct02_quando_cnpj_invalido_entao_retorna_msg_cnpj_invalido() {
+		try {
+			// dado que que o cnpj eh invalido
+			// quando instancio o objeto
+			String dataVenc = obtemDataAtual();
+			fatura = new Fatura(1, "7111291700012", dataVenc, "moveis planejados", "1500");
+			fail("deveria falhar emissao da fatura com cnpj invalido");
+		} catch (Exception e) {
+			//entao retorna mensagem de cnpj invalido
+			assertEquals ("CNPJ invalido", e.getMessage());
+		}
+		
+	}
+	/*
+	 * verificar a data da emissao da fatura 
+	 */
+	@Test
+	void ct03_dado_que_a_fatura_foi_emitida_data_de_emissa_deve_ser_igual_a_data_atual() {
 		try {
 
 			// dado que fatura foi emitida com dados validos
 			String dataVenc = obtemDataAtual();
 			fatura = new Fatura(1, "71112917000126", dataVenc, "moveis planejados", "1500");
 			// quando consulto a data de emissao
-			String dataDaEmissao = fatura.getDataEmissao();
 			// então a data eh igual a data data atual
 			String dataDeHoje = obtemDataAtual();
-			assertTrue(dataDaEmissao.equals(dataDeHoje));
+			assertTrue(dataDeHoje.equals(fatura.getDataEmissao()));
 		} catch (Exception e) {
-			logger.info(">>>>>> nao deveria falhar => " + e.getMessage());
-			fail("nao deveria falhar fatura valida");
+			fail("nao deveria falhar data de emissao valida valida");
 
 		}
 		
 	}
 	@Test
-	void ct03_quando_data_valida_retorna_true() {
+	void ct04_quando_data_valida_retorna_true() {
 		assertTrue(fatura.isValida("30/09/2022"));
 	}
 	@Test
-	void ct04_quando_data_invalida_retorna_false() {
+	void ct05_quando_data_invalida_retorna_false() {
 		assertFalse(fatura.isValida("32/09/2022"));
 	}
 
 	@Test
-	void ct04_dado_que_a_data_eh_segunda_quando_consulta_eh_domingo_retorna_false() {
+	void ct06_dado_que_a_data_eh_segunda_quando_consulta_eh_domingo_retorna_false() {
 		assertFalse(fatura.ehDomingo("12/09/2022"));
 	}
 
 	@Test
-	void ct05_dado_que_a_data_eh_domingo_quando_consulta_eh_domingo_retorna_true() {
+	void ct07_dado_que_a_data_eh_domingo_quando_consulta_eh_domingo_retorna_true() {
 		assertTrue(fatura.ehDomingo("11/09/2022"));
 	}
 
 	@Test
-	void ct06_dado_que_a_data_eh_valida_quando_consulta_retorna_true() {
+	void ct08_dado_que_a_data_eh_valida_quando_consulta_retorna_true() {
 		assertTrue(fatura.isValida("11/09/2022"));
 	}
 
 	@Test
-	void ct07_dado_que_a_dataVencimento_eh_domingo_retorna_dataVencimento_invalida() {
+	void ct09_dado_que_a_dataVencimento_eh_domingo_retorna_dataVencimento_invalida() {
 		try {
 			// dado que 11/09/2022 é domino
 			// quando confirma o cadastro
@@ -94,12 +116,12 @@ class TestaFatura1 {
 			fail("deveria disparar a exception para data invalida domingo");
 		} catch (Exception e) {
 			// então retorna data invalida
-			assertEquals("Data de vencimento inválida", e.getMessage());
+			assertEquals("Data de vencimento invalida", e.getMessage());
 		}
 	}
 
 	@Test
-	void ct08_dado_que_a_dataVencimento_invalida_retorna_mensagem_erro() {
+	void ct10_dado_que_a_dataVencimento_invalida_retorna_mensagem_erro() {
 		// dado que a data de vencimento eh 31/02/2022
 		Fatura fatura = new Fatura();
 		// quando - confirma o cadastro

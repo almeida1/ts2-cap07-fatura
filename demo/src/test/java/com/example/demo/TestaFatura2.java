@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -26,6 +27,8 @@ class TestaFatura2 {
 	@CsvSource({
 
 			"1,71112917000126, 28/09/2023, moveis planejados, 1500, satisfatorio",
+			"1,7111291700012, 28/09/2023, moveis planejados, 1500, CNPJ invalido",
+			"1,71112917000126, 28/09/2023, moveis planejados, 1500, Data de emissao valida",
 			"1,71112917000126, 02/10/2022, moveis planejados, 1500, Data de vencimento invalida", // dt venc domingo
 			"1,71112917000126, 31/02/2022, moveis planejados, 1500, Data de vencimento invalida", // dt venc invalida
 			"1,71112917000126, %, moveis planejados, 1500, Data de vencimento invalida", // dt venc caracter especial
@@ -45,7 +48,12 @@ class TestaFatura2 {
 	void validaFatura(int numero, String cnpj, String dataVencimento, String desc, String valor, String re) {
 		try {
 			fatura = new Fatura(numero, cnpj, dataVencimento, desc, valor);
-			assertEquals(re, "satisfatorio");
+			if (re.equals("satisfatorio")) {
+				assertEquals(re, "satisfatorio");
+			} else {
+				String dataDeHoje = obtemDataAtual();
+				assertTrue(dataDeHoje.equals(fatura.getDataEmissao()));
+			}
 		} catch (Exception e) {
 			assertEquals(re, e.getMessage());
 		}
