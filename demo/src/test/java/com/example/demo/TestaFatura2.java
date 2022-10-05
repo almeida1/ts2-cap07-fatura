@@ -27,20 +27,19 @@ class TestaFatura2 {
 	@ParameterizedTest
 	@CsvSource({
 
-			"1,71112917000126, 28/09/2023, moveis planejados, 1500, satisfatorio",
-			"1,7111291700012, 28/09/2023, moveis planejados, 1500, CNPJ invalido",
-			"1,71112917000126, 02/10/2022, moveis planejados, 1500, Data de vencimento invalida", // dt venc domingo
+			"1,71112917000126, 28/09/2023, moveis planejados, 1500, fatura not null",  //classe valida
+			"1,7111291700012, 28/09/2023, moveis planejados, 1500, CNPJ invalido",     //cnpj com 13 caracteres
+			"1,71112917000123, 12/09/2023, moveis planejados, 1500, CNPJ invalido",    //cnpj modulo 11 errado
+			"1,71112917000126, 15/01/2023, moveis planejados, 1500, Data de vencimento invalida", // dt venc domingo
 			"1,71112917000126, 31/02/2022, moveis planejados, 1500, Data de vencimento invalida", // dt venc invalida
-			"1,71112917000126, , moveis planejados, 1500, Data de vencimento invalida", // dt venc invalida
+			"1,71112917000126, , moveis planejados, 1500, Data de vencimento invalida", // dt venc null
 			"1,71112917000126, %, moveis planejados, 1500, Data de vencimento invalida", // dt venc caracter especial
-			"1,71112917000126,, moveis planejados, 1500, Data de vencimento invalida", // dt venc null
 			"1,71112917000126, ' ', moveis planejados, 1500, Data de vencimento invalida", // dt venc branco
-			"1,71112917000123, 12/09/2023, moveis planejados, 1500, CNPJ invalido", // cnpj invalido
-			"1,71112917000126, 12/08/2022, moveis planejados, 1500, Data de vencimento invalida", // cnpj invalido
-			"1,71112917000126, 28/09/2023,'', 1500, Descriminacao do servico invalido", // servico invalido
-			"1,71112917000126, 28/09/2023,, 1500, Descriminacao do servico invalido", // servico invalido
-			"1,71112917000126, 28/09/2023,moveis planejados, , Valor invalido", // valor invalido
-			"1,71112917000126, 28/09/2023,moveis planejados,'' , Valor invalido", // valor invalido
+			"1,71112917000126, 12/08/2022, moveis planejados, 1500, Data de vencimento invalida", // dt venc menor que data atual
+			"1,71112917000126, 28/09/2023,'', 1500, Descriminacao do servico invalido", // servico em branco
+			"1,71112917000126, 28/09/2023,, 1500, Descriminacao do servico invalido", // servico null
+			"1,71112917000126, 28/09/2023,moveis planejados, , Valor invalido", // valor null
+			"1,71112917000126, 28/09/2023,moveis planejados,'' , Valor invalido", // valor branco
 			"1,71112917000126, 28/09/2023,moveis planejados,0 , Valor invalido" // valor invalido
 	})
 
@@ -50,8 +49,7 @@ class TestaFatura2 {
 		try {
 			fatura = new Fatura(numero, cnpj, dataVencimento, desc, valor);
 			assertNotNull(fatura);
-			String dataDeHoje = obtemDataAtual();
-			assertTrue(dataDeHoje.equals(fatura.getDataEmissao()));
+			assertTrue(obtemDataAtual().equals(fatura.getDataEmissao()));
 
 		} catch (Exception e) {
 			assertEquals(re, e.getMessage());

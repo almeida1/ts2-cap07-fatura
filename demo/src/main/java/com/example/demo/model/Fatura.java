@@ -60,7 +60,7 @@ public class Fatura {
 
 	public String setDataVencimento(String data) {
 
-		if ((data != null) && (isValida(data) == true) && (dtVencMaiorDtAtual(getDataEmissao(), data) == true) && (ehDomingo(data)) == false) {
+		if ((isValida(data) == true) && (dtVencMaiorDtAtual(getDataEmissao(), data) == true) && (ehDomingo(data)) == false) {
 			logger.info(">>>>>> setDataVencimento  => " + data);
 			return data;
 		} else {
@@ -70,16 +70,12 @@ public class Fatura {
 	}
 
 	public boolean ehDomingo(String data) {
-		if (isValida(data) && data != null) {
 
-			DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
-			DateTime umaData = fmt.parseDateTime(data);
-			if (umaData.dayOfWeek().getAsText().equals("domingo")) {
-				logger.info(">>>>>> ehdomingo => true ");
-				return true;
-			} else {
-				return false;
-			}
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
+		DateTime umaData = fmt.parseDateTime(data);
+		if (umaData.dayOfWeek().getAsText().equals("domingo")) {
+			logger.info(">>>>>> ehdomingo => true ");
+			return true;
 		} else {
 			return false;
 		}

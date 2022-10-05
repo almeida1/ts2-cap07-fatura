@@ -38,8 +38,7 @@ class TestaFatura1 {
 			fatura = new Fatura(1, "71112917000126", "02/10/2023", "moveis planejados", "1500");
 			// entao fatura nao e nula e a data de emisssao é igual a data de hoje
 			assertNotNull(fatura);
-			String dataDeHoje = obtemDataAtual();
-			assertTrue(dataDeHoje.equals(fatura.getDataEmissao()));
+			assertTrue(obtemDataAtual().equals(fatura.getDataEmissao()));
 		} catch (Exception e) {
 			logger.info(">>>>>> nao deveria falhar => " + e.getMessage());
 			fail("nao deveria falhar fatura valida");
@@ -64,41 +63,12 @@ class TestaFatura1 {
 		}
 		
 	}
-	
 	@Test
-	void ct04_quando_data_valida_retorna_true() {
-		assertTrue(fatura.isValida("30/09/2022"));
-	}
-	@Test
-	void ct05_quando_data_invalida_retorna_false() {
-		assertFalse(fatura.isValida("32/09/2022"));
-	}
-
-	@Test
-	void ct06_dado_que_a_data_eh_segunda_quando_consulta_eh_domingo_retorna_false() {
-		assertFalse(fatura.ehDomingo("12/09/2022"));
-	}
-
-	@Test
-	void ct07_dado_que_a_data_eh_domingo_quando_consulta_eh_domingo_retorna_true() {
-		assertTrue(fatura.ehDomingo("11/09/2022"));
-	}
-
-	@Test
-	void ct08_dado_que_a_data_eh_valida_quando_consulta_retorna_true() {
-		assertTrue(fatura.isValida("11/09/2022"));
-	}
-	@Test
-	void ct08_dado_que_a_data_eh_null_quando_consulta_retorna_true() {
-		assertFalse(fatura.isValida(null));
-	}
-
-	@Test
-	void ct09_dado_que_a_dataVencimento_eh_domingo_retorna_dataVencimento_invalida() {
+	void ct03_dado_que_a_dataVencimento_eh_domingo_retorna_dataVencimento_invalida() {
 		try {
-			// dado que 11/09/2022 é domino
+			// dado que 15/01/2023 é domino
 			// quando confirma o cadastro
-			fatura = new Fatura(1, "71112917000126", "11/09/2022", "moveis planejados", "1500");
+			fatura = new Fatura(1, "71112917000126", "15/01/2023", "moveis planejados", "1500");
 			fail("deveria disparar a exception para data invalida domingo");
 		} catch (Exception e) {
 			// então retorna data invalida
@@ -107,14 +77,11 @@ class TestaFatura1 {
 	}
 
 	@Test
-	void ct10_dado_que_a_dataVencimento_invalida_retorna_mensagem_erro() {
-		// dado que a data de vencimento eh 31/02/2022
-		Fatura fatura = new Fatura();
-		// quando - confirma o cadastro
-		boolean ehvalido = fatura.isValida("31/02/2022");
-		// entao - retorna 
-		assertFalse(ehvalido);
-
+	void ct04_quando_data_invalida_retorna_false() {
+		assertFalse(fatura.isValida("32/09/2022"));
 	}
-
+	@Test
+	void ct05_dado_que_a_data_eh_null_quando_consulta_retorna_true() {
+		assertFalse(fatura.isValida(null));
+	}
 }
