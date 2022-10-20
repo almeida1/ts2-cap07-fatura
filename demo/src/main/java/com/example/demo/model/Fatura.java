@@ -50,13 +50,22 @@ public class Fatura {
 	public float getValor() {
 		return valor;
 	}
-
+	/**
+	 * atribui a data de emissao da fatura a data do sistema
+	 * @return a data atual no formato texto
+	 */
 	private String setDataEmissao() {
 		DateTime dataAtual = new DateTime();
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/YYYY");
 		logger.info(">>>>>> setDataEmissao para data de hoje => " + dataAtual.toString(fmt));
 		return dataAtual.toString(fmt);
 	}
+	
+	/**
+	 * atribui a data de vencimento verifica se a data eh valida
+	 * @param data tipo texto no formato valido
+	 * @return data tipo texto valida
+	 */
 
 	public String setDataVencimento(String data) {
         //É necessário ficar atento a situações excepcionais onde a execução ou não do restante dos operadores 
@@ -69,6 +78,11 @@ public class Fatura {
 		}
 
 	}
+	/**
+	 * verifica se a data foi agendada para um domingo
+	 * @param data
+	 * @return true ou false
+	 */
 
 	public boolean ehDomingo(String data) {
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
@@ -81,7 +95,11 @@ public class Fatura {
 		}
 
 	}
-
+	/**
+	 * verifica se a data esta no formato valido, dia e mes e ano valido
+	 * @param data
+	 * @return true ou false ou uma exception
+	 */
 	public boolean isValida(String data) {
 		if (data != null) {
 			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -97,7 +115,12 @@ public class Fatura {
 			return false;
 		}
 	}
-
+	/**
+	 * verifica se a data de vencimento eh maior que a data atual
+	 * @param dataAtual
+	 * @param dataVencimento
+	 * @return true ou false ou uma exception
+	 */
 	public boolean dtVencMaiorDtAtual(String dataAtual, String dataVencimento) {
 		try {
 			DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
@@ -116,7 +139,11 @@ public class Fatura {
 			throw new IllegalArgumentException("Data invalida");
 		}
 	}
-
+	/**
+	 * atribui o valor da fatura, verifica se o valor da fatura é valido
+	 * @param v 
+	 * @return o valor no formato float ou uma exception
+	 */
 	public float setValorFatura(String v) {
 		try {
 			float temp = Float.parseFloat(v);
@@ -130,8 +157,10 @@ public class Fatura {
 		}
 	}
 
-	/*
-	 * atribui o cnpj vefica se o cnpj é valido
+	/**
+	 * atribui o valor do cnpj, verifica se o cnpj eh valido 
+	 * @param cnpj
+	 * @return o cnpj validado ou uma excpetion
 	 */
 	public String setCnpj(String cnpj) {
 		if (cnpjIsValido(cnpj)) {
@@ -146,7 +175,11 @@ public class Fatura {
 	public String getServicoContratado() {
 		return servicoContratado;
 	}
-
+	/**
+	 * atribui o texto do servico contratado
+	 * @param servico
+	 * @return o texto validado ou uma exeption 
+	 */
 	public String setServicoContratado(String servico) {
 		if ((servico == null) || (servico.isBlank())) {
 			logger.info(">>>>>> setServicoContratado invalido ");
@@ -156,6 +189,11 @@ public class Fatura {
 			return servico;
 		}
 	}
+	/**
+	 * valida o cnpj
+	 * @param cnpj no tipo texto sem formatacao
+	 * @return true/false ou uma exception
+	 */
 
 	public boolean cnpjIsValido(String cnpj) {
 		char dig13, dig14;
